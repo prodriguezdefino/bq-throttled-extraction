@@ -1,0 +1,6 @@
+tf/.terraform
+tf/terraform.tfvars
+tf/terraform.tfstate*
+target
+nbactions.xml
+launcher_local.sh
