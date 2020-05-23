@@ -273,13 +273,12 @@ public class BQExportPropagator {
                 .filter(blob -> !blob.isDirectory())
                 // Each file may be bigger than the desired propagation chunk size, 
                 // then this function will return multiple propagation results per file.
-                // Lets partially apply the function with the params available before the stream resolution. 
+                // Lets partially apply the blob processor function with the params available before the stream 
+                // resolves its content. 
                 .flatMap(Functions.curry(blobProcessorFunction)
                         .apply(accumulationMaxSize)
                         .apply(millisPerPropagation))
                 .filter(pResult -> !pResult.messageResult().isEmpty())
-                // order the stream based on the execution date for the results
-                .sorted((pr1, pr2) -> pr1.executionDateString().compareTo(pr2.executionDateString()))
                 .forEach(result -> {
                     LOG.info(String.format("Propagated %dKb from %s with message %s at %s", result.payloadSizeInKB(),
                             result.path(), result.messageResult(), result.executionDateString()));
