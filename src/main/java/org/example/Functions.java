@@ -1,6 +1,9 @@
 package org.example;
 
 import com.google.cloud.storage.Blob;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.channels.Channels;
@@ -25,6 +28,7 @@ import org.example.Model.*;
 public class Functions {
 
     private static final Logger LOG = Logger.getLogger(Functions.class.getCanonicalName());
+    private static final Gson GSON = new Gson();
 
     /**
      * Process a GCS blob file reading its content and propagating them based on the configured size limit and rate for
@@ -46,7 +50,10 @@ public class Functions {
                     .reduce(new Accumulator(accumulationSizeLimit, file.getSelfLink(), Functions::dummyPropagate,
                             new SimpleThrottler(millisPerPropagationEvent)),
                             (accumulator, json) -> accumulator.accumulate(json),
-                            Accumulator::combine).getResults();
+                            Accumulator::combine)
+                    // lets make sure we drain the accumulation before getting the results
+                    .drain()
+                    .getResults();
             // TODO: maybe here keep track of the processed files in case of error
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, String.format("Error while reading from GCS for file %s", file.getSelfLink()), ex);
@@ -64,10 +71,13 @@ public class Functions {
      */
     private static PropagationResult dummyPropagate(String fileLocation, List<String> accumulatedEntries) {
         var processingDateString = DATE_FORMATTER.format(LocalDateTime.now());
-        var payload = accumulatedEntries.stream().collect(Collectors.joining(System.lineSeparator()));
-        var size = accumulatedEntries.stream().collect(Collectors.joining(",")).getBytes().length;
-        var message = Optional.of(String.format("Sent to endpoint payload %s...",
-                accumulatedEntries.stream().limit(1).collect(Collectors.joining())));
+        var arrayPayload = accumulatedEntries.stream().collect(Collectors.joining(","));
+        var records = GSON.fromJson(String.format("[%s]", arrayPayload), JsonArray.class);
+        var requestJson = new JsonObject();
+        requestJson.add("records", records);
+        var payload = GSON.toJson(requestJson);
+        var size = payload.getBytes().length;
+        var message = Optional.of(String.format("Sent to endpoint payload %s...", payload.substring(0, payload.length() < 30 ? payload.length() : 30)));
 
         try {
             // simulate some IO latency since there is no remote call being done
