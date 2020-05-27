@@ -74,11 +74,20 @@ public class Model {
             if (accumulatedEntries.add(entry)) {
                 accumulatedSize += entry.getBytes().length;
                 if (accumulatedSize >= accumulatedSizeLimit) {
-                    throttler.throttle();
-                    resultsBuilder.accept(propagationFunction.apply(fileLocation, accumulatedEntries));
-                    accumulatedEntries.clear();
-                    accumulatedSize = 0L;
+                    triggerPropagation();
                 }
+            }
+            return this;
+        }
+
+        /**
+         * Forces the propagation of the current accumulated state.
+         *
+         * @return the same instance, but with its previous content drained.
+         */
+        public Accumulator drain() {
+            if (accumulatedSize > 0) {
+                triggerPropagation();
             }
             return this;
         }
@@ -105,6 +114,16 @@ public class Model {
             });
             acc2.resultsBuilder.build().forEach(result -> acc1.resultsBuilder.accept(result));
             return acc1;
+        }
+
+        /**
+         * Triggers the propagation of the accumulated entries, uses the configured Throttle before propagation.
+         */
+        private void triggerPropagation() {
+            throttler.throttle();
+            resultsBuilder.accept(propagationFunction.apply(fileLocation, accumulatedEntries));
+            accumulatedEntries.clear();
+            accumulatedSize = 0L;
         }
 
     }
