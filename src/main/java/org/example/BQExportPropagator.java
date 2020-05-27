@@ -31,10 +31,12 @@ import org.example.Functions.TriFunction;
 
 public class BQExportPropagator {
 
+    static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
     private static final Logger LOG = Logger.getLogger(BQExportPropagator.class.getCanonicalName());
     private static final Long DESIRED_FILE_SIZE = 1024L * 1024 * 10;
-    static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
     private static final long MILLIS_PER_PROPAGATION_EVENT = 1000L;
+    private static final int GCS_RESULT_PAGE_SIZE = 10;
+
     /**
      * Close to a MB of data.
      */
@@ -265,9 +267,8 @@ public class BQExportPropagator {
         // process those files that were exported and print the propagation results.
         StreamSupport
                 .stream(bucketClient
-                        .list(
-                                Storage.BlobListOption.prefix(prefix),
-                                Storage.BlobListOption.pageSize(10))
+                        .list(Storage.BlobListOption.prefix(prefix),
+                                Storage.BlobListOption.pageSize(GCS_RESULT_PAGE_SIZE))
                         .iterateAll()
                         .spliterator(), false)
                 .filter(blob -> !blob.isDirectory())
@@ -281,7 +282,7 @@ public class BQExportPropagator {
                 .filter(pResult -> !pResult.messageResult().isEmpty())
                 .forEach(result -> {
                     LOG.info(String.format("Propagated %dKb from %s with message %s at %s", result.payloadSizeInKB(),
-                            result.path(), result.messageResult(), result.executionDateString()));
+                            result.path(), result.messageResult().orElse("No Message."), result.executionDateString()));
                 });
     }
 
