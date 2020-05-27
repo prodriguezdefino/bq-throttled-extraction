@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -20,7 +21,22 @@ public class Model {
     /**
      * Represents the results of the propagation event.
      */
-    record PropagationResult(String path, String executionDateString, Integer payloadSize, Optional<String> messageResult) {
+    static class PropagationResult {
+
+        final String path;
+        final String executionDateString;
+        final Integer payloadSize;
+        final Optional<String> messageResult;
+        final Boolean success;
+
+        public PropagationResult(String path, String executionDateString, Integer payloadSize,
+                Optional<String> messageResult, Boolean success) {
+            this.path = path;
+            this.executionDateString = executionDateString;
+            this.payloadSize = payloadSize;
+            this.messageResult = messageResult;
+            this.success = success;
+        }
 
         /**
          * Returns the size of a propagation request payload in kilobytes.
@@ -30,14 +46,59 @@ public class Model {
         public Integer payloadSizeInKB() {
             return payloadSize / 1024;
         }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 17 * hash + Objects.hashCode(this.executionDateString);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final PropagationResult other = (PropagationResult) obj;
+            if (!Objects.equals(this.executionDateString, other.executionDateString)) {
+                return false;
+            }
+            return true;
+        }
+
     }
 
     /**
      * Captures the command line arguments for ease of consumption.
      */
-    record Arguments(String project, String destinationDataset, String exportDestinationTable,
-    String exportBucketName, String exportBucketPathPrefix, String bqQuery,
-    Map<String, QueryParameterValue> bqQueryParams) {
+    static class Arguments {
+
+        final String project;
+        final String destinationDataset;
+        final String exportDestinationTable;
+        final String exportBucketName;
+        final String exportBucketPathPrefix;
+        final String bqQuery;
+        final Map<String, QueryParameterValue> bqQueryParams;
+
+        public Arguments(String project, String destinationDataset, String exportDestinationTable,
+                String exportBucketName, String exportBucketPathPrefix, String bqQuery,
+                Map<String, QueryParameterValue> bqQueryParams) {
+            this.project = project;
+            this.destinationDataset = destinationDataset;
+            this.exportDestinationTable = exportDestinationTable;
+            this.exportBucketName = exportBucketName;
+            this.exportBucketPathPrefix = exportBucketPathPrefix;
+            this.bqQuery = bqQuery;
+            this.bqQueryParams = bqQueryParams;
+        }
+
     }
 
     /**
@@ -163,7 +224,7 @@ public class Model {
                 try {
                     Thread.sleep(timeToSleep);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(Model.class.getName()).log(Level.SEVERE, "Thread sleep innterruption!", ex);
+                    Logger.getLogger(Model.class.getName()).log(Level.SEVERE, "Thread sleep interruption!", ex);
                     throw new RuntimeException(ex);
                 }
             }

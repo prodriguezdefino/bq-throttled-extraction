@@ -78,14 +78,18 @@ public class Functions {
         var payload = GSON.toJson(requestJson);
         var size = payload.getBytes().length;
         var message = Optional.of(String.format("Sent to endpoint payload %s...", payload.substring(0, payload.length() < 30 ? payload.length() : 30)));
+        var success = false;
 
         try {
             // simulate some IO latency since there is no remote call being done
             Files.writeString(Files.createDirectories(Paths.get("temps")).resolve(processingDateString), payload);
+            LOG.info(String.format("Propagated %d bytes from %s with message %s at %s", size, fileLocation, message.get(),
+                    processingDateString));
+            success = true;
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, "Error storing file", ex);
         }
-        return new PropagationResult(fileLocation, processingDateString, size, message);
+        return new PropagationResult(fileLocation, processingDateString, size, message, success);
     }
 
     /**
