@@ -4,4 +4,4 @@ tf/terraform.tfstate*
 target
 temps
 nbactions.xml
-launcher_local.sh
+launcher*_local.sh
