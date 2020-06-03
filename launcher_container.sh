@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p temps
+
 docker run -it -e GOOGLE_APPLICATION_CREDENTIALS=/cred/credentials.json \
 	-v <SOME_PATH_TO_CREDENTIALS>:/cred/credentials.json \
 	-v <SOME_PATH_TO_TEMPS>:/temps:rw \
