@@ -1,0 +1,6 @@
+{
+  "resources":[
+    {"pattern":"com/google/api/client/googleapis/google-api-client.properties"}, 
+    {"pattern":"google-http-client.properties"}
+  ]
+}

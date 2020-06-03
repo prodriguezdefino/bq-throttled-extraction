@@ -1,0 +1,334 @@
+[
+  {
+    "name":"com.google.api.client.googleapis.services.AbstractGoogleClientRequest",
+    "allDeclaredFields":true
+  },
+  {
+    "name":"com.google.api.client.googleapis.services.json.AbstractGoogleJsonClientRequest",
+    "allDeclaredFields":true
+  },
+  {
+    "name":"com.google.api.client.http.GenericUrl",
+    "allDeclaredFields":true
+  },
+  {
+    "name":"com.google.api.client.http.HttpHeaders",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.client.json.GenericJson",
+    "allDeclaredFields":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.client.json.webtoken.JsonWebSignature$Header",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.client.json.webtoken.JsonWebToken$Header",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.client.json.webtoken.JsonWebToken$Payload",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.client.util.GenericData",
+    "allDeclaredFields":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.Bigquery$Jobs$Get",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.services.bigquery.Bigquery$Jobs$GetQueryResults",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.services.bigquery.Bigquery$Jobs$Insert",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.services.bigquery.Bigquery$Tables$Get",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.services.bigquery.BigqueryRequest",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.ErrorProto",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.ExplainQueryStage",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.ExplainQueryStep",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.ExternalDataConfiguration",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.GetQueryResultsResponse",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.Job",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobConfiguration",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobConfigurationExtract",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobConfigurationQuery",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobReference",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobStatistics",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobStatistics$ReservationUsage",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobStatistics2$ReservationUsage",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobStatistics2",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobStatistics4",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.JobStatus",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.QueryTimelineSample",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.Table",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.TableFieldSchema",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.TableReference",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.bigquery.model.TableSchema",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.Storage$Buckets$Get",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.services.storage.Storage$Objects$Get",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.services.storage.Storage$Objects$List",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.services.storage.StorageRequest",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket$Cors",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket$IamConfiguration",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket$IamConfiguration$BucketPolicyOnly",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket$IamConfiguration$UniformBucketLevelAccess",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket$Lifecycle",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket$Lifecycle$Rule",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket$Lifecycle$Rule$Action",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket$Lifecycle$Rule$Condition",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Bucket$Owner",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.BucketAccessControl",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.BucketAccessControl$ProjectTeam",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.ObjectAccessControl",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.ObjectAccessControl$ProjectTeam",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.Objects",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.StorageObject",
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.api.services.storage.model.StorageObject$Owner",
+    "allDeclaredFields":true,
+    "allDeclaredMethods":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }]
+  },
+  {
+    "name":"com.google.common.util.concurrent.AbstractFuture",
+    "fields":[
+      {"name":"listeners", "allowUnsafeAccess":true}, 
+      {"name":"value", "allowUnsafeAccess":true}, 
+      {"name":"waiters", "allowUnsafeAccess":true}
+    ]
+  },
+  {
+    "name":"com.google.common.util.concurrent.AbstractFuture$Waiter",
+    "fields":[
+      {"name":"next", "allowUnsafeAccess":true}, 
+      {"name":"thread", "allowUnsafeAccess":true}
+    ]
+  },
+  {
+    "name":"java.lang.Object",
+    "allDeclaredFields":true
+  },
+  {
+    "name":"java.lang.reflect.AccessibleObject",
+    "fields":[{"name":"override"}]
+  },
+  {
+    "name":"java.util.AbstractMap",
+    "allDeclaredFields":true
+  },
+  {
+    "name":"sun.misc.Unsafe",
+    "allDeclaredFields":true
+  }
+  ]

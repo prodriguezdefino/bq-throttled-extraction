@@ -1,4 +1,4 @@
-package org.example;
+package org.example.bqexportpropagator;
 
 import com.google.cloud.bigquery.BigQueryException;
 import com.google.cloud.bigquery.BigQueryOptions;
@@ -26,13 +26,13 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.example.Model.*;
-import org.example.Functions.TriFunction;
+import org.example.bqexportpropagator.Model.*;
+import org.example.bqexportpropagator.Functions.TriFunction;
 
-public class BQExportPropagator {
+public class Launcher {
 
     static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-    private static final Logger LOG = Logger.getLogger(BQExportPropagator.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(Launcher.class.getCanonicalName());
     private static final Long DESIRED_FILE_SIZE = 1024L * 1024 * 10;
     private static final long MILLIS_PER_PROPAGATION_EVENT = 1000L;
     private static final int GCS_RESULT_PAGE_SIZE = 10;
@@ -45,15 +45,15 @@ public class BQExportPropagator {
     public static void main(String[] arguments) {
         try {
             var args = captureArguments(arguments);
-            var gcsBucketPrefix = "gs://" + args.exportBucketName + "/" + args.exportBucketPathPrefix;
-            var exportURIs = createExportWildcardPaths(args.bqQuery, args.bqQueryParams, args.project,
-                    args.destinationDataset, args.exportDestinationTable, gcsBucketPrefix);
-            moveDataToExportTable(args.bqQuery, args.bqQueryParams, args.project, args.destinationDataset,
-                    args.exportDestinationTable);
+            var gcsBucketPrefix = "gs://" + args.exportBucketName() + "/" + args.exportBucketPathPrefix();
+            var exportURIs = createExportWildcardPaths(args.bqQuery(), args.bqQueryParams(), args.project(),
+                    args.destinationDataset(), args.exportDestinationTable(), gcsBucketPrefix);
+            moveDataToExportTable(args.bqQuery(), args.bqQueryParams(), args.project(), args.destinationDataset(),
+                    args.exportDestinationTable());
 
-            exportTableToGCS(args.project, args.destinationDataset, args.exportDestinationTable,
+            exportTableToGCS(args.project(), args.destinationDataset(), args.exportDestinationTable(),
                     gcsBucketPrefix, exportURIs, "NEWLINE_DELIMITED_JSON");
-            propagateExportResults(args.exportBucketName, args.exportBucketPathPrefix, ACCUMULATION_SIZE_LIMIT,
+            propagateExportResults(args.exportBucketName(), args.exportBucketPathPrefix(), ACCUMULATION_SIZE_LIMIT,
                     MILLIS_PER_PROPAGATION_EVENT, Functions::processGCSBlob);
         } catch (InterruptedException ex) {
             LOG.log(Level.SEVERE, "Export procedure interrupted.", ex);
@@ -146,8 +146,7 @@ public class BQExportPropagator {
         // the number of export URIs that will be sent to the BQ export request
         Long numberOfWildcardURIs = 1L;
 
-        if (dryRunJob.getStatistics() instanceof JobStatistics.QueryStatistics) {
-            var stats = (JobStatistics.QueryStatistics) dryRunJob.getStatistics();
+        if (dryRunJob.getStatistics() instanceof JobStatistics.QueryStatistics stats) {
             numberOfWildcardURIs = stats.getTotalBytesProcessed() / DESIRED_FILE_SIZE;
             numberOfWildcardURIs = numberOfWildcardURIs == 0L ? 1L : numberOfWildcardURIs;
         }
@@ -281,12 +280,12 @@ public class BQExportPropagator {
                         .apply(accumulationMaxSize)
                         .apply(millisPerPropagation))
                 // lets take care of those that failed propagation
-                .filter(pResult -> !pResult.success)
+                .filter(pResult -> !pResult.success())
                 // print them in the terminal
                 .forEach(result -> {
                     LOG.info(String.format("Failed to propagate a portion of file %s at %s, chunk size %dKB, message %s",
-                            result.path, result.executionDateString, result.payloadSizeInKB(),
-                            result.messageResult.orElse("No Message.")));
+                            result.path(), result.executionDateString(), result.payloadSizeInKB(),
+                            result.messageResult().orElse("No Message.")));
                 });
     }
 

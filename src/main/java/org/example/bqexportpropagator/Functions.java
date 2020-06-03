@@ -1,4 +1,4 @@
-package org.example;
+package org.example.bqexportpropagator;
 
 import com.google.cloud.storage.Blob;
 import com.google.gson.Gson;
@@ -19,8 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static org.example.BQExportPropagator.DATE_FORMATTER;
-import org.example.Model.*;
+import static org.example.bqexportpropagator.Launcher.DATE_FORMATTER;
+import org.example.bqexportpropagator.Model.*;
 
 /**
  * Holds utility functions.
