@@ -23,7 +23,16 @@ This project makes use of the preview features of JDK 14 like pattern matching f
 
 ## Extraction Procedure
 
-The launcher will trigger the provided query on the required GCP project BigQuery instance...
+The launcher will start the procedure by triggering the provided query on the specified GCP project BigQuery instance, the results of that query will be stored as a temporal table in the provided Dataset. 
+
+Once that query finishes the Launcher will trigger the export of the temporal table into the specified GCS location, the process will hint BigQuery the desired max file size by sending multiple URI destinations, this to distribute the data in multiple files minimizing potential retries in case of failures. 
+
+After the GCS export completes the process will start reading the stored GCS files one by one and accumulate the results (expected as JSON objects) until a max size it's reached, when that happens the `Accumulator` object will interact with the configured `Throttler` instance before propagating any data to the destination. The propagation is made using the configured Function on the `Launcher::propagateExportResults` method. 
+
+As the data is being propagated to the destination the process will be reporting in the logs the progress. Once all the files has been read and propagated the process will print out in the logs those propagation requests that may have failed during the execution.
+
+### Note 
+The current implementation does not handle retries or backoff policies while propagating results, a production level implementation should extend the provided dummy implementation introducing those features (exponential backoff, retries and error tracking).
 
 ## Prerequisites 
 
