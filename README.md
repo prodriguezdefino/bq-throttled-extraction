@@ -17,17 +17,26 @@ usage: bq-export-propagator
                           the name
 ```
 
+### Notes on the JDK version
+
+This project makes use of the preview features of JDK 14 like pattern matching for `instanceof` and `records`, since the build script encapsulates those details this can be ommited in most cases; when needing compliance with a lower version of the JDK the changes can be easily introduced by changing the `record` definitions to static inner classes.
+
 ## Extraction Procedure
 
-The launcher will trigger the provided query on the required GCP project BigQuery instance, 
+The launcher will trigger the provided query on the required GCP project BigQuery instance...
 
 ## Prerequisites 
 
 ### Permissions
 
+The Launcher needs a service account crendentials file available in the environment variable `GOOGLE_APPLICATION_CREDENTIALS`, the launcher scripts (normal shell and container based) already include the placeholder to indicate the path from where the file can be found in the local environment. Needed permissions: 
+* Storage Object Creator
+* BigQuery Data Editor applied to the temporary Dataset
+* BigQuery Data Viewer applied to the source Dataset (where the query reads data from)
+
 ### Infrastructure
 
-This project includes a Terraform script, under the (tf)[tf] directory, to recreate and cleanup the needed resources. To enumerate them: 
+This project includes a Terraform script, under the [tf](/tf) directory, to recreate and cleanup the needed resources. To enumerate them: 
 * a couple of BigQuery Datasets 
     * one to store the source data tables (not necessary if that already exists)
     * another to store the temporal tables to store the query results, this dataset has a pretty aggresive expiration policy (to ease the cleanup after exports)
@@ -35,7 +44,16 @@ This project includes a Terraform script, under the (tf)[tf] directory, to recre
 
 ### Build
 
-## Configuration knobs 
+The minimum requirements to build and launch this extraction process is to have a local Docker installation. The included `build.sh` script will take care of construction of the docker image and the `launcher_contrainer.sh` script can be used to run it. 
+
+For development purposes JDK 14 and a Maven installation are required for the Java code, Terraform is also required to recreate the needed infrastructure pieces. 
+
+## Configuration Knobs 
+
+The Launcher script enables the configuration of most destination and temporal resources (GCP project, BigQuery resources and temporal bucket ones), but added to this there are a few internal tweaks that can be done by changing some magic numbers (Java constants) in the source code: 
+* `Launcher.DESIRED_FILE_SIZE` the process uses this number while trying to hint BQ the desired file sizes when exporting the data to GCS. When the query results are small enough all data will be exported to a single file regardless this number.
+* `Launcher.MILLIS_PER_PROPAGATION_EVENT` the amount of milliseconds between propagations, this is used to instantiate the `Throttler` object in use by the `Accumulator` object.
+* `Launcher.GCS_RESULT_PAGE_SIZE` the number of elements present in the GCS list request, basically the page size. 
 
 ## Extending/Changing current functionality
 
