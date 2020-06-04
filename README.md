@@ -2,7 +2,7 @@
 
 This project is intended as a PoC for extracting BigQuery stored data, specifically the results of an arbitrary query, to an arbitrary location introducing a throttle mechanism to do not overload the destination. The idea is to be a base line implementation for a more complete solution, it provides a simple implementation for propagating the extracted data and pretty naive throttling mechanism, in both cases more complete implementations can be plugged in by implementing a Function with the correct signature in the case of the propagation function and by implementing the `Throttler` interface present as part of the defined `Model` class. 
 
-This PoC receives as parameters the following entries: 
+This PoC receives as parameters the following required entries: 
 ``` 
 usage: bq-export-propagator
  -b,--bucket <arg>        Cloud Storage Bucket to store temporal export
