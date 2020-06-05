@@ -54,9 +54,13 @@ public class Functions {
                     // lets make sure we drain the accumulation before getting the results
                     .drain()
                     .getResults();
-            // TODO: maybe here keep track of the processed files in case of error
         } catch (IOException ex) {
-            LOG.log(Level.SEVERE, String.format("Error while reading from GCS for file %s", file.getSelfLink()), ex);
+            var errorMessage = String.format("Error while reading from GCS for file %s", file.getSelfLink());
+            LOG.log(Level.SEVERE, errorMessage, ex);
+            var dateTimeString = Launcher.DATE_FORMATTER.format(LocalDateTime.now());
+            var fileSize = file.getSize().intValue();
+            var resultMessage = Optional.of(errorMessage);
+            results = Stream.of(new PropagationResult(file.getSelfLink(), dateTimeString, fileSize, resultMessage, false));
         }
         return results;
     }
