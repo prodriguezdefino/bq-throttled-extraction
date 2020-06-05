@@ -50,6 +50,7 @@ This project includes a Terraform script, under the [tf](/tf) directory, to recr
     * one to store the source data tables (not necessary if that already exists)
     * another to store the temporal tables to store the query results, this dataset has a pretty aggresive expiration policy (to ease the cleanup after exports)
 * a bucket to temporarily store the BigQuery query results
+* a launcher GCE instance, which as startup script install `docker` so it can be used to kickoff the build, this instance creation is controlled by the terraform variable `create_launcher_instance`.
 
 ### Build
 
@@ -84,3 +85,12 @@ try {
 }
 ```
 The `payload` reference in this code holds the String JSON representation of the payload to be sent as part of a request. Also this implementation assumes the existence of a `temps` directory where the extracted files will be stored, the launcher scripts takes care of creating it before hand.
+
+## Further Experiments
+
+Completely unrelated with the scope of this PoC, there are a couple of ongoing experiments related with native GraalVM based images and tailored JRE images. This experiments are currently not successful and possibly will end up being abandoned since they require changes on the dependant libraries in order to work properly, but in the meantime worth trying some workarounds. 
+
+### GraalVM Image
+
+There are big chances that GraalVM may be the future of the Java runtimes, currently thought the way that most libraries and applications are written make them imcompatible with the ideas behind 
+
