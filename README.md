@@ -5,16 +5,22 @@ This project is intended as a PoC for extracting BigQuery stored data, specifica
 This PoC receives as parameters the following required entries: 
 ``` 
 usage: bq-export-propagator
- -b,--bucket <arg>        Cloud Storage Bucket to store temporal export
-                          data
- -d,--dataset <arg>       BigQuery Dataset to store temporal export data
- -p,--pathprefix <arg>    String path where the export is going to be
-                          stored, current datetime will be added to the
-                          path
- -q,--query <arg>         The query that will be exported and propagated
- -t,--tableprefix <arg>   BigQuery Table prefix name to store temporal
-                          export data, current datetime will be added to
-                          the name
+ -b,--bucket <arg>          Cloud Storage Bucket to store temporal export
+                            data.
+ -d,--dataset <arg>         BigQuery Dataset to store temporal export
+                            data.
+ -p,--pathprefix <arg>      String path where the export is going to be
+                            stored, current datetime will be added to the
+                            path.
+ -q,--query <arg>           The query that will be exported and
+                            propagated.
+ -s,--sizelimit <arg>       The amount of bytes the process will
+                            accumulate before propagating the data.
+ -tp,--tableprefix <arg>    BigQuery Table prefix name to store temporal
+                            export data, current datetime will be added to
+                            the name.
+ -tt,--throttletime <arg>   The amount of milliseconds to wait before
+                            propagating subsequent data chunks.
 ```
 
 ### Notes on the JDK version
@@ -45,11 +51,11 @@ The Launcher needs a service account crendentials file available in the environm
 
 ### Infrastructure
 
-This project includes a Terraform script, under the [tf](/tf) directory, to recreate and cleanup the needed resources. To enumerate them: 
+This project includes a Terraform script, under the [tf](/tf) directory, to recreate and cleanup the needed resources. All the data related resources are created with expirations in mind, so they delete data entries after some time. To enumerate them: 
 * a couple of BigQuery Datasets 
     * one to store the source data tables (not necessary if that already exists)
     * another to store the temporal tables to store the query results, this dataset has a pretty aggresive expiration policy (to ease the cleanup after exports)
-* a bucket to temporarily store the BigQuery query results
+* a bucket to temporarily store the BigQuery query results, also with an expiration policy included
 * a launcher GCE instance, which as startup script install `docker` so it can be used to kickoff the build, this instance creation is controlled by th terraform variable `create_launcher_instance`.
 
 ### Build
