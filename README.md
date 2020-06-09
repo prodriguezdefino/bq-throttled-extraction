@@ -50,7 +50,7 @@ This project includes a Terraform script, under the [tf](/tf) directory, to recr
     * one to store the source data tables (not necessary if that already exists)
     * another to store the temporal tables to store the query results, this dataset has a pretty aggresive expiration policy (to ease the cleanup after exports)
 * a bucket to temporarily store the BigQuery query results
-* a launcher GCE instance, which as startup script install `docker` so it can be used to kickoff the build, this instance creation is controlled by the terraform variable `create_launcher_instance`.
+* a launcher GCE instance, which as startup script install `docker` so it can be used to kickoff the build, this instance creation is controlled by th terraform variable `create_launcher_instance`.
 
 ### Build
 
@@ -92,5 +92,13 @@ Completely unrelated with the scope of this PoC, there are a couple of ongoing e
 
 ### GraalVM Image
 
-There are big chances that GraalVM may be the future of the Java runtimes, currently thought the way that most libraries and applications are written make them imcompatible with the ideas behind 
+There are big chances that GraalVM may be the future of the Java runtimes, currently thought the way that most libraries and applications are written make them imcompatible with the ideas behind native images, e.g.: extensive use of reflection, unsafe calls, classpath scans for resources, etc. 
+
+In order to circumvent this limitations GraalVM provide tools that help scanning this not desired uses of internal apis or reflective calls and also a way to configure the native image creation toolkit to be aware of their existence and introduce the necessary changes in the resulting binary. With that in mind is that this repo includes a folder named [native-image-configs](/native-image-configs) containing all the captured configurations by running our process in a GraalVM enabling the tracing agent, this generates most of the desired configs but sadly not all of them. 
+
+As it is at this time, the repository includes the scripts needed to create a native image for GraalVM including the captured configurations by the tracing agent, plus some manually introduced by running the process on it binary (native) version. In short it does not work for now, will keep trying and researching different methods. 
+
+### JLink Image
+
+
 
