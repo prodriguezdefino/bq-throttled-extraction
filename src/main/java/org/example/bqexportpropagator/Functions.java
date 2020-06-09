@@ -28,6 +28,7 @@ import org.example.bqexportpropagator.Model.*;
 public class Functions {
 
     private static final Logger LOG = Logger.getLogger(Functions.class.getCanonicalName());
+    private static final int PROPAGATED_MESSAGE_INFO_LENGHT = 60;
     private static final Gson GSON = new Gson();
 
     /**
@@ -81,7 +82,8 @@ public class Functions {
         requestJson.add("records", records);
         var payload = GSON.toJson(requestJson);
         var size = payload.getBytes().length;
-        var message = Optional.of(String.format("Sent to endpoint payload %s...", payload.substring(0, payload.length() < 30 ? payload.length() : 30)));
+        var message = Optional.of(String.format("Sent to endpoint payload %s...", payload.substring(0,
+                payload.length() < PROPAGATED_MESSAGE_INFO_LENGHT ? payload.length() : PROPAGATED_MESSAGE_INFO_LENGHT)));
         var success = false;
 
         try {
