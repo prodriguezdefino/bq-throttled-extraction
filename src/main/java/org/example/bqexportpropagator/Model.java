@@ -37,7 +37,8 @@ public class Model {
      * Captures the command line arguments for ease of consumption.
      */
     record Arguments(String project, String destinationDataset, String exportDestinationTable, String exportBucketName,
-    String exportBucketPathPrefix, String bqQuery, Map<String, QueryParameterValue> bqQueryParams) {
+    String exportBucketPathPrefix, String bqQuery, Map<String, QueryParameterValue> bqQueryParams,
+    Long accumulationSizeLimit, Long throttleTimeInMillis) {
     }
 
     /**

@@ -34,13 +34,13 @@ public class Launcher {
     static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
     private static final Logger LOG = Logger.getLogger(Launcher.class.getCanonicalName());
     private static final Long DESIRED_FILE_SIZE = 1024L * 1024 * 10;
-    private static final long MILLIS_PER_PROPAGATION_EVENT = 1000L;
-    private static final int GCS_RESULT_PAGE_SIZE = 10;
+    private static final Long MILLIS_PER_PROPAGATION_EVENT = 1000L;
+    private static final Integer GCS_RESULT_PAGE_SIZE = 10;
 
     /**
      * Close to a MB of data.
      */
-    private static final Long ACCUMULATION_SIZE_LIMIT = 1024L * 900L;
+    private static final Long ACCUMULATION_SIZE_LIMIT = 100L * 1024L * 900L;
 
     public static void main(String[] arguments) {
         try {
@@ -53,8 +53,8 @@ public class Launcher {
 
             exportTableToGCS(args.project(), args.destinationDataset(), args.exportDestinationTable(),
                     gcsBucketPrefix, exportURIs, "NEWLINE_DELIMITED_JSON");
-            propagateExportResults(args.exportBucketName(), args.exportBucketPathPrefix(), ACCUMULATION_SIZE_LIMIT,
-                    MILLIS_PER_PROPAGATION_EVENT, Functions::processGCSBlob);
+            propagateExportResults(args.exportBucketName(), args.exportBucketPathPrefix(), args.accumulationSizeLimit(),
+                    args.throttleTimeInMillis(), Functions::processGCSBlob);
         } catch (InterruptedException ex) {
             LOG.log(Level.SEVERE, "Export procedure interrupted.", ex);
         } catch (BigQueryException bqex) {
@@ -69,31 +69,39 @@ public class Launcher {
         var options = new Options();
         var required = true;
 
-        var project = new Option("p", "project", true, "GCP Project");
+        var project = new Option("p", "project", true, "GCP project identifier.");
         project.setRequired(required);
         options.addOption(project);
 
-        var dataset = new Option("d", "dataset", true, "BigQuery Dataset to store temporal export data");
+        var dataset = new Option("d", "dataset", true, "BigQuery Dataset to store temporal export data.");
         dataset.setRequired(required);
         options.addOption(dataset);
 
-        var table = new Option("t", "tableprefix", true,
-                "BigQuery Table prefix name to store temporal export data, current datetime will be added to the name");
+        var table = new Option("tp", "tableprefix", true,
+                "BigQuery Table prefix name to store temporal export data, current datetime will be added to the name.");
         table.setRequired(required);
         options.addOption(table);
 
-        var bucket = new Option("b", "bucket", true, "Cloud Storage Bucket to store temporal export data");
+        var bucket = new Option("b", "bucket", true, "Cloud Storage Bucket to store temporal export data.");
         bucket.setRequired(required);
         options.addOption(bucket);
 
         var pathPrefix = new Option("p", "pathprefix", true,
-                "String path where the export is going to be stored, current datetime will be added to the path");
+                "String path where the export is going to be stored, current datetime will be added to the path.");
         pathPrefix.setRequired(required);
         options.addOption(pathPrefix);
 
-        var query = new Option("q", "query", true, "The query that will be exported and propagated");
+        var query = new Option("q", "query", true, "The query that will be exported and propagated.");
         query.setRequired(required);
         options.addOption(query);
+
+        var accumulationSizeLimit = new Option("s", "sizelimit", true, "The amount of bytes the process will accumulate before propagating the data.");
+        accumulationSizeLimit.setRequired(false);
+        options.addOption(accumulationSizeLimit);
+
+        var throttleTimeInMillis = new Option("tt", "throttletime", true, "The amount of milliseconds to wait before propagating subsequent data chunks.");
+        throttleTimeInMillis.setRequired(false);
+        options.addOption(throttleTimeInMillis);
 
         var parser = new DefaultParser();
         var formatter = new HelpFormatter();
@@ -108,7 +116,9 @@ public class Launcher {
                     cmd.getOptionValue("bucket"),
                     cmd.getOptionValue("pathprefix") + "/" + DATE_FORMATTER.format(LocalDateTime.now()),
                     cmd.getOptionValue("query"),
-                    Map.of());
+                    Map.of(),
+                    Long.valueOf(cmd.getOptionValue("sizelimit", ACCUMULATION_SIZE_LIMIT.toString())),
+                    Long.valueOf(cmd.getOptionValue("throttletime", MILLIS_PER_PROPAGATION_EVENT.toString())));
         } catch (ParseException e) {
             formatter.printHelp("bq-export-propagator", options);
             throw e;
