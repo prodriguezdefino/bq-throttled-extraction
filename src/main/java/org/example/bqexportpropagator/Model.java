@@ -46,12 +46,14 @@ public class Model {
      */
     static class Accumulator {
 
+        private static final Logger LOG = Logger.getLogger(Accumulator.class.getCanonicalName());
         private final BiFunction<String, List<String>, PropagationResult> propagationFunction;
         private final String fileLocation;
         private Stream.Builder<PropagationResult> resultsBuilder = Stream.builder();
         private final Supplier<Stream<PropagationResult>> resultStreamSupplier = () -> resultsBuilder.build();
         private Long accumulatedSize = 0L;
         private final Long accumulatedSizeLimit;
+        private Long lastPropagationTimestamp = Instant.now().toEpochMilli();
         private final List<String> accumulatedEntries = new LinkedList<>();
         private final Throttler throttler;
 
@@ -120,10 +122,14 @@ public class Model {
          * Triggers the propagation of the accumulated entries, uses the configured Throttle before propagation.
          */
         private void triggerPropagation() {
+            var accumulationTimestamp = Instant.now().toEpochMilli();
+            LOG.log(Level.INFO, String.format("Last accumulation took %d milliseconds.",
+                    (accumulationTimestamp - lastPropagationTimestamp)));
             throttler.throttle();
             resultsBuilder.accept(propagationFunction.apply(fileLocation, accumulatedEntries));
             accumulatedEntries.clear();
             accumulatedSize = 0L;
+            lastPropagationTimestamp = Instant.now().toEpochMilli();
         }
 
     }
