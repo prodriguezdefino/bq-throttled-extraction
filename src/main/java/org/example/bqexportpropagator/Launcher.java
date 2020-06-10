@@ -40,7 +40,7 @@ public class Launcher {
     /**
      * Close to a MB of data.
      */
-    private static final Long ACCUMULATION_SIZE_LIMIT = 100L * 1024L * 900L;
+    private static final Long ACCUMULATION_SIZE_LIMIT = 1024L * 900L;
 
     public static void main(String[] arguments) {
         try {
