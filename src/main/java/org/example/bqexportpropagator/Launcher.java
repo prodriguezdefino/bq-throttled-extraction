@@ -45,16 +45,16 @@ public class Launcher {
     public static void main(String[] arguments) {
         try {
             var args = captureArguments(arguments);
-            var gcsBucketPrefix = "gs://" + args.exportBucketName() + "/" + args.exportBucketPathPrefix();
-            var exportURIs = createExportWildcardPaths(args.bqQuery(), args.bqQueryParams(), args.project(),
-                    args.destinationDataset(), args.exportDestinationTable(), gcsBucketPrefix);
-            moveDataToExportTable(args.bqQuery(), args.bqQueryParams(), args.project(), args.destinationDataset(),
-                    args.exportDestinationTable());
+            var gcsBucketPrefix = "gs://" + args.exportBucketName + "/" + args.exportBucketPathPrefix;
+            var exportURIs = createExportWildcardPaths(args.bqQuery, args.bqQueryParams, args.project,
+                    args.destinationDataset, args.exportDestinationTable, gcsBucketPrefix);
+            moveDataToExportTable(args.bqQuery, args.bqQueryParams, args.project, args.destinationDataset,
+                    args.exportDestinationTable);
 
-            exportTableToGCS(args.project(), args.destinationDataset(), args.exportDestinationTable(),
+            exportTableToGCS(args.project, args.destinationDataset, args.exportDestinationTable,
                     gcsBucketPrefix, exportURIs, "NEWLINE_DELIMITED_JSON");
-            propagateExportResults(args.exportBucketName(), args.exportBucketPathPrefix(), args.accumulationSizeLimit(),
-                    args.throttleTimeInMillis(), Functions::processGCSBlob);
+            propagateExportResults(args.exportBucketName, args.exportBucketPathPrefix, args.accumulationSizeLimit,
+                    args.throttleTimeInMillis, Functions::processGCSBlob);
         } catch (InterruptedException ex) {
             LOG.log(Level.SEVERE, "Export procedure interrupted.", ex);
         } catch (BigQueryException bqex) {
@@ -156,7 +156,8 @@ public class Launcher {
         // the number of export URIs that will be sent to the BQ export request
         Long numberOfWildcardURIs = 1L;
 
-        if (dryRunJob.getStatistics() instanceof JobStatistics.QueryStatistics stats) {
+        if (dryRunJob.getStatistics() instanceof JobStatistics.QueryStatistics) {
+            var stats = (JobStatistics.QueryStatistics) dryRunJob.getStatistics();
             numberOfWildcardURIs = stats.getTotalBytesProcessed() / DESIRED_FILE_SIZE;
             numberOfWildcardURIs = numberOfWildcardURIs == 0L ? 1L : numberOfWildcardURIs;
         }
@@ -290,12 +291,12 @@ public class Launcher {
                         .apply(accumulationMaxSize)
                         .apply(millisPerPropagation))
                 // lets take care of those that failed propagation
-                .filter(pResult -> !pResult.success())
+                .filter(pResult -> !pResult.success)
                 // print them in the terminal
                 .forEach(result -> {
                     LOG.info(String.format("Failed to propagate a portion of file %s at %s, chunk size %dKB, message %s",
-                            result.path(), result.executionDateString(), result.payloadSizeInKB(),
-                            result.messageResult().orElse("No Message.")));
+                            result.path, result.executionDateString, result.payloadSizeInKB(),
+                            result.messageResult.orElse("No Message.")));
                 });
     }
 

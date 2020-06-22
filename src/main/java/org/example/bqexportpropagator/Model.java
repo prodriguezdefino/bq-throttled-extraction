@@ -20,8 +20,22 @@ public class Model {
     /**
      * Represents the results of the propagation event.
      */
-    record PropagationResult(String path, String executionDateString, Integer payloadSize,
-    Optional<String> messageResult, Boolean success) {
+    static class PropagationResult {
+
+        String path;
+        String executionDateString;
+        Integer payloadSize;
+        Optional<String> messageResult;
+        Boolean success;
+
+        public PropagationResult(String path, String executionDateString, Integer payloadSize,
+                Optional<String> messageResult, Boolean success) {
+            this.path = path;
+            this.executionDateString = executionDateString;
+            this.payloadSize = payloadSize;
+            this.messageResult = messageResult;
+            this.success = success;
+        }
 
         /**
          * Returns the size of a propagation request payload in kilobytes.
@@ -36,9 +50,32 @@ public class Model {
     /**
      * Captures the command line arguments for ease of consumption.
      */
-    record Arguments(String project, String destinationDataset, String exportDestinationTable, String exportBucketName,
-    String exportBucketPathPrefix, String bqQuery, Map<String, QueryParameterValue> bqQueryParams,
-    Long accumulationSizeLimit, Long throttleTimeInMillis) {
+    static class Arguments {
+
+        String project;
+        String destinationDataset;
+        String exportDestinationTable;
+        String exportBucketName;
+        String exportBucketPathPrefix;
+        String bqQuery;
+        Map<String, QueryParameterValue> bqQueryParams;
+        Long accumulationSizeLimit;
+        Long throttleTimeInMillis;
+
+        public Arguments(String project, String destinationDataset, String exportDestinationTable, String exportBucketName,
+                String exportBucketPathPrefix, String bqQuery, Map<String, QueryParameterValue> bqQueryParams,
+                Long accumulationSizeLimit, Long throttleTimeInMillis) {
+            this.project = project;
+            this.destinationDataset = destinationDataset;
+            this.exportDestinationTable = exportDestinationTable;
+            this.exportBucketName = exportBucketName;
+            this.exportBucketPathPrefix = exportBucketPathPrefix;
+            this.bqQuery = bqQuery;
+            this.bqQueryParams = bqQueryParams;
+            this.accumulationSizeLimit = accumulationSizeLimit;
+            this.throttleTimeInMillis = throttleTimeInMillis;
+        }
+
     }
 
     /**
