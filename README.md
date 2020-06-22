@@ -23,10 +23,6 @@ usage: bq-export-propagator
                             propagating subsequent data chunks.
 ```
 
-### Notes on the JDK version
-
-This project makes use of the preview features of JDK 14 like pattern matching for `instanceof` and `records`, since the build script encapsulates those details this can be ommited in most cases; when needing compliance with a lower version of the JDK the changes can be easily introduced by changing the `record` definitions to static inner classes.
-
 ## Extraction Procedure
 
 The launcher will start the procedure by triggering the provided query on the specified GCP project BigQuery instance, the results of that query will be stored as a temporal table in the provided Dataset. 
@@ -60,7 +56,7 @@ This project includes a Terraform script, under the [tf](/tf) directory, to recr
 
 ### Build
 
-The minimum requirements to build and launch this extraction process is to have a local Docker installation. The included `build.sh` script will take care of construction of the docker image and the `launcher_contrainer.sh` script can be used to run it. 
+The minimum requirements to build and launch this extraction process is to have a local Docker installation. The included `build.sh` script will take care of construction of the docker images and the `launcher_contrainer.sh` script can be used to run it. By default it marks the uber-jar maven configuration as the `latest` tag for the `bq-extract-propagator` image, the other images being built are experiments/unfinished approaches. 
 
 For development purposes JDK 14 and a Maven installation are required for the Java code, Terraform is also required to recreate the needed infrastructure pieces. 
 
