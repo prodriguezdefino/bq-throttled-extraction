@@ -58,7 +58,7 @@ This project includes a Terraform script, under the [tf](/tf) directory, to recr
 
 The minimum requirements to build and launch this extraction process is to have a local Docker installation. The included `build.sh` script will take care of construction of the docker images and the `launcher_contrainer.sh` script can be used to run it. By default it marks the uber-jar maven configuration as the `latest` tag for the `bq-extract-propagator` image, the other images being built are experiments/unfinished approaches. 
 
-For development purposes JDK 14 and a Maven installation are required for the Java code, Terraform is also required to recreate the needed infrastructure pieces. 
+For development purposes JDK 11 and a Maven installation are required for the Java code, Terraform is also required to recreate the needed infrastructure pieces. 
 
 ## Configuration Knobs 
 
